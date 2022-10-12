@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "357333738745",
+    "firebase_url": "https://chatflutter-201ba-default-rtdb.firebaseio.com",
+    "project_id": "chatflutter-201ba",
+    "storage_bucket": "chatflutter-201ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357333738745:android:08938cbeef4c8b6601ae28",
+        "android_client_info": {
+          "package_name": "br.com.lion.hofman.chat_online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357333738745-3rm699ae6inudp7mhdvmsc0rq4ce5j6c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAujPw-O0AfChDMLhVwZukwYkCw2WNcvyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357333738745-3rm699ae6inudp7mhdvmsc0rq4ce5j6c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
