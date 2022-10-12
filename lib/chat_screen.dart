@@ -13,6 +13,10 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  //flutter fire documentation
+  final Stream<QuerySnapshot> _msgsStream =
+      FirebaseFirestore.instance.collection('messages').snapshots();
+
   void _sendMessage({String? text, PickedFile? imgFile}) async {
     Map<String, dynamic> data = {};
 
@@ -31,6 +35,31 @@ class _ChatScreenState extends State<ChatScreen> {
     FirebaseFirestore.instance.collection("messages").add(data);
   }
 
+  StreamBuilder<QuerySnapshot> _streamBuilder() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _msgsStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            reverse: true,
+            itemBuilder: ((context, index) {
+              Map<String, dynamic> data =
+                  snapshot.data!.docs[index].data()! as Map<String, dynamic>;
+              return ListTile(title: Text(data['text'] ?? ""));
+            }));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +67,13 @@ class _ChatScreenState extends State<ChatScreen> {
         title: const Text('Olá'),
         elevation: 0,
       ),
-      body: TextComposer(
-        sendMessage: _sendMessage,
+      body: Column(
+        children: [
+          Expanded(child: _streamBuilder()),
+          TextComposer(
+            sendMessage: _sendMessage,
+          ),
+        ],
       ),
     );
   }
