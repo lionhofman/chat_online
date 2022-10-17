@@ -103,9 +103,12 @@ class _ChatScreenState extends State<ChatScreen> {
             itemCount: snapshot.data!.docs.length,
             reverse: true,
             itemBuilder: ((context, index) {
-              Map<String, dynamic>? data =
+              Map<String, dynamic> data =
                   snapshot.data!.docs[index].data()! as Map<String, dynamic>;
-              return ChatMessage(data: data);
+              return ChatMessage(
+                data: data,
+                mine: true,
+              );
             }));
       },
     );
