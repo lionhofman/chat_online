@@ -19,6 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoggedIn = false;
+  bool isLoading = false;
   User? _currentUser;
   @override
   void initState() {
@@ -77,6 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
       "uid": user!.uid,
       "senderName": user.displayName,
       "senderPhotoUrl": user.photoURL,
+      "time": Timestamp.now(),
     };
     if (imgFile != null) {
       File io = File(imgFile.path);
@@ -84,9 +86,15 @@ class _ChatScreenState extends State<ChatScreen> {
           .ref()
           .child(DateTime.now().microsecondsSinceEpoch.toString())
           .putFile(io);
-
+      setState(() {
+        isLoading = true;
+      });
       await task.whenComplete(() async {
         data['imgUrl'] = await task.snapshot.ref.getDownloadURL();
+      });
+
+      setState(() {
+        isLoading = false;
       });
     }
     if (text != null) data['text'] = text;
@@ -96,7 +104,10 @@ class _ChatScreenState extends State<ChatScreen> {
   //read msg from firebase in real time
   StreamBuilder<QuerySnapshot> _streamBuilder() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('messages').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('messages')
+          .orderBy('time', descending: true)
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
@@ -108,14 +119,14 @@ class _ChatScreenState extends State<ChatScreen> {
           );
         }
         return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
             reverse: true,
+            itemCount: snapshot.data!.docs.length,
             itemBuilder: ((context, index) {
               Map<String, dynamic> data =
                   snapshot.data!.docs[index].data()! as Map<String, dynamic>;
               return ChatMessage(
                 data: data,
-                mine: true,
+                mine: data['uid'] == _currentUser?.uid,
               );
             }));
       },
@@ -148,6 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(child: _streamBuilder()),
+          isLoading ? const LinearProgressIndicator() : Container(),
           TextComposer(
             sendMessage: _sendMessage,
           ),
