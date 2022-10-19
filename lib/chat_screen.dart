@@ -18,13 +18,21 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isLoggedIn = false;
   User? _currentUser;
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((user) {
-      _currentUser = user;
+      setState(() {
+        _currentUser = user;
+        isLoggedIn = checkUserIsLoggedIn();
+      });
     });
+  }
+
+  bool checkUserIsLoggedIn() {
+    return _currentUser != null;
   }
 
   Future<User?> _getUser() async {
@@ -119,8 +127,23 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Olá'),
+        title:
+            Text(isLoggedIn ? 'Olá, ${_currentUser!.displayName}' : 'Chat App'),
         elevation: 0,
+        centerTitle: true,
+        actions: [
+          isLoggedIn
+              ? IconButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                    googleSignIn.signOut();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Você saiu com sucesso!"),
+                    ));
+                  },
+                  icon: const Icon(Icons.exit_to_app))
+              : Container(),
+        ],
       ),
       body: Column(
         children: [
