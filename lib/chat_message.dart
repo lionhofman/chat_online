@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatMessage extends StatelessWidget {
   final Map<String, dynamic> data;
   final bool mine;
+
   const ChatMessage({Key? key, required this.data, required this.mine})
       : super(key: key);
 
@@ -36,11 +39,30 @@ class ChatMessage extends StatelessWidget {
                         style: const TextStyle(fontSize: 16),
                       ),
                 data['senderName'] != null
-                    ? Text(
-                        data['senderName'],
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 8,
+                              ),
+                              child: Text(
+                                data['senderName'],
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              formatDateTimeFromFirestone(data),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     : const Text(''),
@@ -58,5 +80,13 @@ class ChatMessage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String formatDateTimeFromFirestone(Map<String, dynamic> data) {
+    DateTime dt = DateTime.now();
+    if (data['time'] != null) {
+      dt = (data['time'] as Timestamp).toDate();
+    }
+    return DateFormat('HH:mm a').format(dt); //22:00 PM
   }
 }
