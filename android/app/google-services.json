@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "357333738745-kf08bh95a9f86iqhsuohroatm4o4a0ph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.lion.hofman.chat_online",
+            "certificate_hash": "4a7755a1f9beeeae80df6df9bcbe33fed470c182"
+          }
+        },
+        {
           "client_id": "357333738745-3rm699ae6inudp7mhdvmsc0rq4ce5j6c.apps.googleusercontent.com",
           "client_type": 3
         }
