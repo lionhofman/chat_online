@@ -1,16 +1,16 @@
 # chat_online
 
-A new Flutter project.
+The Chat Online is a project that creates a chat by connecting and saving messages in firebase. More precisely, creating a collection for the messages in Firebase>>Firestone and saving the images, in the component of Firebase>>Storage. This information is consumed in real time, similar to the most popular chats on the market today. 
+
+-> Google Authentication Login and Logout features were also used.
 
 ## Getting Started
+User 1:
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+https://user-images.githubusercontent.com/1455631/197556483-6e85f12e-26d8-4505-bcba-2427ef124067.mp4
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+User 2:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://user-images.githubusercontent.com/1455631/197556663-70d97c7f-4e18-46ea-b5bc-6c5ec600e6a4.mp4
+
